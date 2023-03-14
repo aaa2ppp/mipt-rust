@@ -5,9 +5,9 @@ authors = ["Alexander Stanovoy <alex.stanovoy@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-clap = ">= 3.1.0"
-serde = { version = ">= 1.0.136", features = ["derive"] }
-serde_yaml = ">= 0.8.23"
-anyhow = ">= 1.0.53"
-glob = ">= 0.3.0"
-reqwest = { version = ">= 0.11.9", features = ["blocking", "multipart"] }
+clap = "3.1.0"
+serde = { version = "1.0.136", features = ["derive"] }
+serde_yaml = "0.8.23"
+anyhow = "1.0.53"
+glob = "0.3.0"
+reqwest = { version = "0.11.9", features = ["blocking", "multipart"] }
