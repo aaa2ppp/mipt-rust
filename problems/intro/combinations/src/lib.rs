@@ -13,7 +13,7 @@ pub fn combinations(arr: &[i32], k: usize) -> Vec<Vec<i32>> {
         dfs(&mut lug, 0, 0, arr.len() - k);
     }
 
-    return res;
+    res
 }
 
 struct Lug<'a> {

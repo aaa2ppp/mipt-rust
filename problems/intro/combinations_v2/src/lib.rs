@@ -7,7 +7,7 @@ pub fn combinations(arr: &[i32], k: usize) -> Vec<Vec<i32>> {
         let mut buf: Vec<usize> = vec![0; k];
         let mut i = 0;
         let mut j = 0;
-        let  n = arr.len() - k;
+        let n = arr.len() - k;
 
         loop {
             while i < buf.len() && j <= n + i {
@@ -17,7 +17,7 @@ pub fn combinations(arr: &[i32], k: usize) -> Vec<Vec<i32>> {
             }
             if i == buf.len() {
                 res.push(buf.iter().map(|j| arr[*j]).collect());
-            } 
+            }
             if i == 0 {
                 break;
             }
@@ -26,5 +26,5 @@ pub fn combinations(arr: &[i32], k: usize) -> Vec<Vec<i32>> {
         }
     }
 
-    return res;
+    res
 }

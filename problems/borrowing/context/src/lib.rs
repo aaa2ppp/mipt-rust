@@ -8,6 +8,12 @@ pub struct Context {
     singles: HashMap<TypeId, Box<dyn Any>>,
 }
 
+impl Default for Context {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Context {
     pub fn new() -> Self {
         Context {

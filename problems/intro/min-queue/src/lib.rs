@@ -6,15 +6,21 @@ struct Item<T> {
 }
 
 pub struct MinStack<T> {
-    vec: Vec<Item<T>>
+    vec: Vec<Item<T>>,
+}
+
+impl<T: Clone + Ord> Default for MinStack<T> {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl<T: Clone + Ord> MinStack<T> {
     pub fn new() -> Self {
-        Self{ vec: Vec::new() }
+        Self { vec: Vec::new() }
     }
 
-    fn vec_push(vec :&mut Vec<Item<T>>, val: T) {
+    fn vec_push(vec: &mut Vec<Item<T>>, val: T) {
         let mut idx_of_min = vec.len();
 
         if let Some(idx) = vec.last().map(|it| it.idx_of_min) {
@@ -26,7 +32,7 @@ impl<T: Clone + Ord> MinStack<T> {
         vec.push(Item { val, idx_of_min });
     }
 
-    fn vec_min(vec: &Vec<Item<T>>) -> Option<&T>{
+    fn vec_min(vec: &[Item<T>]) -> Option<&T> {
         vec.last().map(|it| &vec[it.idx_of_min].val)
     }
 
@@ -54,7 +60,7 @@ impl<T: Clone + Ord> MinStack<T> {
         self.vec.is_empty()
     }
 
-    pub fn move_to(&mut self, to :&mut MinStack<T>) {
+    pub fn move_to(&mut self, to: &mut MinStack<T>) {
         while let Some(val) = self.pop() {
             to.push(val);
         }
@@ -64,6 +70,12 @@ impl<T: Clone + Ord> MinStack<T> {
 pub struct MinQueue<T> {
     input: MinStack<T>,
     output: MinStack<T>,
+}
+
+impl<T: Clone + Ord> Default for MinQueue<T> {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl<T: Clone + Ord> MinQueue<T> {
@@ -95,15 +107,14 @@ impl<T: Clone + Ord> MinQueue<T> {
     }
 
     pub fn min(&self) -> Option<&T> {
-        let a = self.input.min();
-        let b = self.output.min();
-
-        if a.is_none() {
-            b
-        } else if b.is_none() {
-            a
+        if let Some(a) = self.input.min() {
+            if let Some(b) = self.output.min() {
+                Some(a.min(b))
+            } else {
+                Some(a)
+            }
         } else {
-            Some(a.unwrap().min(b.unwrap()))
+            self.output.min()
         }
     }
 

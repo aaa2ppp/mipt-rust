@@ -170,7 +170,6 @@ impl GameOfLife {
             for col in 0..cols {
                 let count: usize = cur_grid
                     .neighbours(row, col)
-                    .into_iter()
                     .map(|(row, col)| {
                         if *cur_grid.get(row, col) == Cell::Alive {
                             1

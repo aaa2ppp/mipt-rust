@@ -26,7 +26,7 @@ pub struct PStack<T> {
 
 impl<T> Default for PStack<T> {
     fn default() -> Self {
-        Self { top: None, len: 0 }
+        Self::new()
     }
 }
 
@@ -41,7 +41,7 @@ impl<T> Clone for PStack<T> {
 
 impl<T> PStack<T> {
     pub fn new() -> Self {
-        Self::default()
+        Self { top: None, len: 0 }
     }
 
     pub fn push(&self, value: T) -> Self {
