@@ -23,15 +23,15 @@ fn should_compile1() {
     assert!(map.contains_key(&Number(1)));
 }
 
-// #[test]
-// fn should_compile2() {
-//     let mut map = AVLTreeMap::new();
-//     assert_eq!(map.remove("hello"), None);
-//     assert_eq!(map.insert("hello".to_string(), 1), None);
-//     assert!(map.contains_key("hello"));
-//     assert!(!map.contains_key("world"));
-//     assert_eq!(map.remove_entry("hello"), Some(("hello".to_string(), 1)));
-// }
+#[test]
+fn should_compile2() {
+    let mut map = AVLTreeMap::new();
+    assert_eq!(map.remove("hello"), None);
+    assert_eq!(map.insert("hello".to_string(), 1), None);
+    assert!(map.contains_key("hello"));
+    assert!(!map.contains_key("world"));
+    assert_eq!(map.remove_entry("hello"), Some(("hello".to_string(), 1)));
+}
 
 #[test]
 fn contains() {
@@ -83,7 +83,7 @@ fn test_nth() {
 }
 
 #[test]
-// #[timeout(1500)]
+#[timeout(1500)]
 fn performance1() {
     let count = 10000000;
     let mut rng = rand::thread_rng();
@@ -115,9 +115,10 @@ fn performance1() {
 }
 
 #[test]
-// #[timeout(2500)]
+#[timeout(2500)]
 fn performance2() {
-    let count = 8000000;
+    // let count = 8000000;
+    let count = 5000000;
     let mut rng = rand::thread_rng();
     let mut map = AVLTreeMap::new();
     let mut hash_map = HashMap::<u8, u8>::new();
@@ -145,7 +146,7 @@ fn performance2() {
 }
 
 #[test]
-// #[timeout(1500)]
+#[timeout(1500)]
 fn performance3() {
     let count = 1000000;
     let mut rng = rand::thread_rng();

@@ -1,8 +1,9 @@
 #![forbid(unsafe_code)]
-use crate::node::Node;
+use crate::node::NodeRef;
+use std::borrow::Borrow;
 
 pub struct AVLTreeMap<K, V> {
-    root: Option<Box<Node<K, V>>>,
+    root: NodeRef<K, V>,
 }
 
 impl<K: Ord, V> Default for AVLTreeMap<K, V> {
@@ -13,48 +14,69 @@ impl<K: Ord, V> Default for AVLTreeMap<K, V> {
 
 impl<K: Ord, V> AVLTreeMap<K, V> {
     pub fn new() -> Self {
-        AVLTreeMap { root: None }
+        AVLTreeMap { root: NodeRef::Nil }
     }
 
     pub fn len(&self) -> usize {
-        Node::size(self.root.as_ref())
+        self.root.size()
     }
 
     pub fn is_empty(&self) -> bool {
         self.len() == 0
     }
 
-    pub fn get(&self, key: &K) -> Option<&V> {
-        Node::val(Node::get(self.root.as_ref(), key))
+    pub fn get<Q>(&self, key: &Q) -> Option<&V>
+    where
+        K: Borrow<Q>,
+        Q: Ord + ?Sized,
+    {
+        self.root.get(key).val()
     }
 
-    pub fn get_key_value(&self, key: &K) -> Option<(&K, &V)> {
-        Node::entry(Node::get(self.root.as_ref(), key))
+    pub fn get_key_value<Q>(&self, key: &Q) -> Option<(&K, &V)>
+    where
+        K: Borrow<Q>,
+        Q: Ord + ?Sized,
+    {
+        self.root.get(key).entry()
     }
 
-    pub fn contains_key(&self, key: &K) -> bool {
-        !Node::get(self.root.as_ref(), key).is_none()
+    pub fn contains_key<Q>(&self, key: &Q) -> bool
+    where
+        K: Borrow<Q>,
+        Q: Ord + ?Sized,
+    {
+        !self.root.get(key).is_nil()
     }
 
-    pub fn insert(&mut self, key: K, val: V) -> Option<V> {
-        let (new_root, old_val) = Node::insert(self.root.take(), key, val);
-        self.root = new_root;
+    pub fn insert(&mut self, key: K, val: V) -> Option<V>
+    where
+        K: Ord,
+    {
+        let old_val;
+        (self.root, old_val) = self.root.take().insert(key, val);
         old_val
     }
 
     pub fn nth_key_value(&self, k: usize) -> Option<(&K, &V)> {
-        Node::entry(Node::get_nth(self.root.as_ref(), k))
+        self.root.get_nth(k).entry()
     }
 
-    pub fn remove(&mut self, key: &K) -> Option<V> {
-        let (new_root, old_node) = Node::remove(self.root.take(), key);
-        self.root = new_root;
-        old_node.map(|n| n.val)
+    pub fn remove<Q>(&mut self, key: &Q) -> Option<V>
+    where
+        K: Borrow<Q>,
+        Q: Ord + ?Sized,
+    {
+        self.remove_entry(key).map(|(_, val)| val)
     }
 
-    pub fn remove_entry(&mut self, key: &K) -> Option<(K, V)> {
-        let (new_root, old_node) = Node::remove(self.root.take(), key);
-        self.root = new_root;
-        old_node.map(|n| (n.key, n.val))
+    pub fn remove_entry<Q>(&mut self, key: &Q) -> Option<(K, V)>
+    where
+        K: Borrow<Q>,
+        Q: Ord + ?Sized,
+    {
+        let old_entry;
+        (self.root, old_entry) = self.root.take().remove(key);
+        old_entry
     }
 }
